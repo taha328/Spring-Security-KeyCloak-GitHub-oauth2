@@ -4,6 +4,8 @@ spring:
       client:
         registration:
           github:
-            clientId: github-client-id
-            clientSecret: github-client-secret
-# ...
+            clientId: Ov23liBtEklRjLP2ZKcL
+            clientSecret: edba6eda91eca1533e13ff1ccc9b66f2b9286f2f
+            redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
+server:
+  port: 8081
