@@ -7,5 +7,22 @@ spring:
             clientId: Ov23liBtEklRjLP2ZKcL
             clientSecret: edba6eda91eca1533e13ff1ccc9b66f2b9286f2f
             redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
+          keycloak:
+            client-id: client-id
+            client-secret: Jc1yobQcEAUhc6zG9mYZK9evqNpu3nlD
+            authorization-grant-type: authorization_code
+            redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
+            scope:
+              - openid
+              - profile
+              - email
+        provider:
+          keycloak:
+            issuer-uri: http://localhost:8080/realms/demo
+            user-name-attribute: preferred_username
+            jwk-set-uri: http://localhost:8080/realms/demo/protocol/openid-connect/certs
 server:
   port: 8081
+logging:
+  level:
+    org.springframework.security: DEBUG

@@ -7,9 +7,20 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("")
 public class Home {
+
     @GetMapping("/home")
     public String greeting() {
         return "Hello, you are logged in!";
+    }
+
+    @GetMapping("/admin")
+    public String admin() {
+        return "Admin";
+    }
+
+    @GetMapping("/user")
+    public String user() {
+        return "User";
     }
 
 }
