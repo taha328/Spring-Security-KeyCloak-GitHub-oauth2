@@ -6,12 +6,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("")
-public class Home {
-
-    @GetMapping("/home")
-    public String greeting() {
-        return "Hello, you are logged in!";
-    }
+public class RoleBasedAccessController {
 
     @GetMapping("/admin")
     public String admin() {

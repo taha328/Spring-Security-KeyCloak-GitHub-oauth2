@@ -26,17 +26,27 @@ public class JwtConverter implements Converter<Jwt, AbstractAuthenticationToken>
         this.properties = properties;
     }
 
+    private String extractEmail(Jwt jwt) {
+
+        return jwt.getClaim("email");
+    }
+
     @Override
     public AbstractAuthenticationToken convert(Jwt jwt) {
+        String email = extractEmail(jwt);
+        if (email == null || !email.contains("@etu.uae.ac.ma")) {
+            throw new IllegalArgumentException("Invalid email domain. Only @etu.uae.ac.ma addresses are allowed.");
+        }
         Collection<GrantedAuthority> authorities = Stream.concat(
                 Stream.concat(
                         jwtGrantedAuthoritiesConverter.convert(jwt).stream(),
                         extractRealmRoles(jwt).stream()
                 ),
-                extractResourceRoles(jwt).stream()
+                Stream.empty() // Closing the stream correctly
         ).collect(Collectors.toSet());
         return new JwtAuthenticationToken(jwt, authorities, getPrincipalClaimName(jwt));
     }
+
 
     private String getPrincipalClaimName(Jwt jwt) {
         String claimName = JwtClaimNames.SUB;
@@ -58,19 +68,6 @@ public class JwtConverter implements Converter<Jwt, AbstractAuthenticationToken>
                 .map(role -> new SimpleGrantedAuthority("ROLE_" + role))
                 .collect(Collectors.toSet());
     }
-
-    private Collection<? extends GrantedAuthority> extractResourceRoles(Jwt jwt) {
-        Map<String, Object> resourceAccess = jwt.getClaim("resource_access");
-        Map<String, Object> resource;
-        Collection<String> resourceRoles;
-
-        if (resourceAccess == null
-                || (resource = (Map<String, Object>) resourceAccess.get(properties.getResourceId())) == null
-                || (resourceRoles = (Collection<String>) resource.get("roles")) == null) {
-            return Set.of();
-        }
-        return resourceRoles.stream()
-                .map(role -> new SimpleGrantedAuthority("ROLE_" + role))
-                .collect(Collectors.toSet());
-    }
 }
+
+

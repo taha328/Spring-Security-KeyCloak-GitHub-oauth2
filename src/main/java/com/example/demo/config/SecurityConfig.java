@@ -25,14 +25,13 @@ public class SecurityConfig {
     @Bean
     public JwtDecoder jwtDecoder() {
         // Replace this example with your actual configuration
-        String jwkSetUri = "http://localhost:8080/realms/demo/protocol/openid-connect/certs";
+        String jwkSetUri = "http://localhost:8090/realms/demo/protocol/openid-connect/certs";
         return NimbusJwtDecoder.withJwkSetUri(jwkSetUri).build();
     }
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests((authz) ->
-                authz.requestMatchers(HttpMethod.GET, "/hello","/").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/admin/**").hasRole(ADMIN)
+                authz.requestMatchers(HttpMethod.GET, "/admin/**").hasRole(ADMIN)
                         .requestMatchers(HttpMethod.GET, "/user/**").hasRole(USER)
                         .anyRequest().authenticated());
         http.oauth2Login(withDefaults());
